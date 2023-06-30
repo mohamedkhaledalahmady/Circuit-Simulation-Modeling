@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict
 
-def read_file(file_path: str, output_type: str) -> List[str]:
+def read_file(file_path: str, output_type: str) -> List[str] | str:
     """
         This Function take file_path as argument and output_type which determine the type of output
         be list or string.

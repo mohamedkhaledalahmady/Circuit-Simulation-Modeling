@@ -1,6 +1,7 @@
 from typing import List, Dict
 from Regular_Expressions import *
 
+
 def Resistor_Parsing(resistor_line: str) -> Dict:
     """
     This Function parse resistor_line to its parameters into dictionary as follow
@@ -88,37 +89,48 @@ def Current_dc_Parsing(current_dc_line: str) -> Dict:
     return dict
 
 
+def Get_Number_of_Nets(circuit_dict: dict) -> int:
+    """
+    This Function determine and return the number of nets in the circuit
+    """
+    number_of_nets = 0
+    for i, val in enumerate(circuit_dict):
+        if circuit_dict[val] != [] and circuit_dict[val] != int:
+            for j, v in enumerate(circuit_dict[val]):
+                number_of_nets = max(
+                    number_of_nets, circuit_dict["resistor_list"][j]['from'], circuit_dict["resistor_list"][j]['to'])
+        else:
+            pass
+    return number_of_nets
+
+
 def parser(content: str) -> Dict:
     content_without_dashed_lines = []
-
-    circuit_dict = {"num_nets": 3,
-                    "resistor_list":[],
-                    "vsource_list" : [],
-                    "isource_list" : [],
-                    "capacitor_list" : [],
-                    "indactor_list" : [],
-    }
-    component_num = 0
+    circuit_dict = {"num_nets": int,
+                    "resistor_list": [],
+                    "vsource_list": [],
+                    "isource_list": [],
+                    "capacitor_list": [],
+                    "inductor_list": []
+                    }
     for i, val in enumerate(content):
         if '//' not in val:
             val = val+' ' if i != len(content)-1 else val
             content_without_dashed_lines.append(val)
 
     for i, val in enumerate(content_without_dashed_lines):
-        #component_num = f"component_{i}"
         if Resistor_Regx(val):
             circuit_dict["resistor_list"].append(Resistor_Parsing(val))
         elif Capacitor_Regx(val):
             circuit_dict["capacitor_list"].append(Capacitor_Parsing(val))
+        elif Inductor_Regx(val):
+            circuit_dict["inductor_list"].append(Inductor_Parsing(val))
         elif Voltage_DC_Regx(val):
             circuit_dict["vsource_list"].append(Voltage_dc_Parsing(val))
         elif Current_DC_Regx(val):
             circuit_dict["isource_list"].append(Current_dc_Parsing(val))
-        elif Inductor_Regx(val):
-            circuit_dict["indactor_list"].append(Inductor_Parsing(val))
         else:
-            print("Nothing")
             pass
             # TODO: Do something notify for error
-
+    circuit_dict["num_nets"] = Get_Number_of_Nets(circuit_dict)
     return circuit_dict
