@@ -10,6 +10,7 @@ def matrix_formulation(elements):
     Element_stamps.idc_stamp(J,elements["isource_list"])
     Element_stamps.ind_stamp(Y,J,elements["num_nets"],elements["inductor_list"],"OP")
     Element_stamps.vdc_stamp(Y,J,elements["num_nets"] + elements["inductor_list"].__len__(),elements["vsource_list"])
+    Element_stamps.vccs_stamp(Y,elements["num_nets"] ,elements["vccs_list"])
 
     return Y, J
 

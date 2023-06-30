@@ -89,6 +89,26 @@ def Current_dc_Parsing(current_dc_line: str) -> Dict:
     return dict
 
 
+def VCCS_Parsing(vccs_line: str) -> Dict:
+    """
+    This Function parse current_dc_line to its parameters into dictionary as follow
+    dict={"instance_name", "component_type", "from", "to", "type", "value", "unit"}
+    """
+    vccs_line_split = vccs_line.split()
+    dict = {
+        "instance_name": vccs_line_split[0],
+        "component_type": vccs_line_split[1],
+        "from_1": int(vccs_line_split[2]),
+        "to_1": int(vccs_line_split[3]),
+        "from_2": int(vccs_line_split[4]),
+        "to_2": int(vccs_line_split[5]),
+        "type": vccs_line_split[6],
+        "value": int(vccs_line_split[7][:-1]) if not vccs_line_split[7][-1].isdigit() else int(vccs_line_split[7]),
+        "unit": vccs_line_split[7][-1] if not vccs_line_split[7][-1].isdigit() else "nothing"
+    }
+    return dict
+
+
 def Get_Number_of_Nets(circuit_dict: dict) -> int:
     """
     This Function determine and return the number of nets in the circuit
@@ -111,7 +131,8 @@ def parser(content: str) -> Dict:
                     "vsource_list": [],
                     "isource_list": [],
                     "capacitor_list": [],
-                    "inductor_list": []
+                    "inductor_list": [],
+                    "vccs_list": []
                     }
     for i, val in enumerate(content):
         if '//' not in val:
@@ -129,6 +150,8 @@ def parser(content: str) -> Dict:
             circuit_dict["vsource_list"].append(Voltage_dc_Parsing(val))
         elif Current_DC_Regx(val):
             circuit_dict["isource_list"].append(Current_dc_Parsing(val))
+        elif VCCS_Regx(val):
+            circuit_dict["vccs_list"].append(VCCS_Parsing(val))
         else:
             pass
             # TODO: Do something notify for error

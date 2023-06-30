@@ -36,3 +36,10 @@ def Current_DC_Regx(voltage_dc_line: str) -> bool:
     """
     pattern = r"^[A-Z|a-z|_][^\s]*\s+(I|i)source\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
     return False if re.match(pattern, voltage_dc_line) == None else True
+
+def VCCS_Regx(vccs_line: str) -> bool:
+    """
+    This Function determine if vccs_line match standard of netlist structure or not
+    """
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(V|v)ccs\s+\d+\s+\d+\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
+    return False if re.match(pattern, vccs_line) == None else True

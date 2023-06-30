@@ -76,3 +76,20 @@ def vdc_stamp(Y, J, num_nets, elements):
         J[vdc_num] += v_value
 
     return Y, J
+
+
+def vccs_stamp(Y, num_nets, elements):
+    for i, element in enumerate(elements):
+        from_node_1 = element["from_1"]
+        to_node_1 = element["to_1"]
+        from_node_2 = element["from_2"]
+        to_node_2 = element["to_2"]
+        gm = element["value"] * Convert_unit_to_value[element["unit"]]
+
+        # TODO : construct 'v' vector
+        Y[from_node_1][from_node_2] = gm
+        Y[to_node_1][to_node_2] = gm
+        Y[from_node_1][to_node_2] = -gm
+        Y[to_node_1][from_node_2] = -gm
+
+    return Y
