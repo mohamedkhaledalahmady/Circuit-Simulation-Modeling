@@ -1,0 +1,6 @@
+// This is sample of netlist geberated by spice
+R1 resistor 1 2 30
+R2 resistor 1 2 20
+R3 resistor 1 2 50
+R4 resistor 1 2 20
+Idc isource 1 0 dc 1
