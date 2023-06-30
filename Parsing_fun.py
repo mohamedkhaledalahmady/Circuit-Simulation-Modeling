@@ -1,6 +1,4 @@
-import os
 from typing import List, Dict
-import re
 from Regular_Expressions import *
 
 def Resistor_Parsing(resistor_line: str) -> Dict:
