@@ -6,20 +6,31 @@ from Parsing_fun import parser
 from Simulations import matrix_formulation_OP, matrix_formulation_AC
 from Solution import Solve_Linear_Matrix
 
+Circuit_Matrix = parser(read_file('Netlist_1.txt', list))
+########################### DC Analysis ########################### 
+Y, J = matrix_formulation_OP(Circuit_Matrix)
+print(Solve_Linear_Matrix(Y, J))
 
-Circuit_Matrix = parser(read_file('Netlist_2.txt', list))
-# Y, J = matrix_formulation_OP(Circuit_Matrix)
-# print(Solve_Linear_Matrix(Y, J))
+# TODO: Know which Analysis is required from Netlist
 
-n = Circuit_Matrix["num_nets"]
-v = np.zeros([n, 19])
-print(v.shape)
-for W in range(1, 20):
-    Y, J = matrix_formulation_AC(Circuit_Matrix, W)
-    # v.append(Solve_Linear_Matrix(Y, J))
-    v[:, W] = Solve_Linear_Matrix(Y, J)
+########################### AC Analysis ########################### 
+# n = Circuit_Matrix["num_nets"] + Circuit_Matrix["vsource_list"].__len__()
+# from_frequency = 1
+# to_frequency = 1000
+# number_of_frequencies = 500
+# # TODO: Get These Data (frequencies rang) from Netlist
+# v = np.zeros([n, number_of_frequencies])
+# frequencies = np.linspace(start=from_frequency, stop=to_frequency, num=number_of_frequencies)
+# i = 0
+# for frq in frequencies:
+#     Y, J = matrix_formulation_AC(Circuit_Matrix, frq)
+#     v[:, i, np.newaxis] = Solve_Linear_Matrix(Y, J)
+#     i += 1
 
-# plt.plot(np.abs(v), range(1, 20))
-
-print(v)
-print(len(v))
+# plt.plot(frequencies, 20*np.log10(v[1, :]), 'r')
+# plt.xlabel('Frequency (Hz)')
+# plt.ylabel('Amplitude (dB)')
+# plt.title('Vout Frequency Response')
+# plt.xscale('log')
+# plt.grid(True)
+# plt.show()
