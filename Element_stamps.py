@@ -93,3 +93,82 @@ def vccs_stamp(Y, num_nets, elements):
         Y[to_node_1][from_node_2] = -gm
 
     return Y
+
+
+def vcvs_stamp(Y, num_nets, elements):
+    for i, element in enumerate(elements):
+        from_node_1 = element["from_1"]
+        to_node_1 = element["to_1"]
+        from_node_2 = element["from_2"]
+        to_node_2 = element["to_2"]
+        vccs_num = num_nets + i + 1
+        A = element["value"] * Convert_unit_to_value[element["unit"]]
+
+        # TODO : construct 'v' vector
+        Y[vccs_num][from_node_2] += -A
+        Y[vccs_num][to_node_2] += A
+        Y[vccs_num][from_node_1] += 1
+        Y[vccs_num][to_node_1] += -1
+
+        Y[from_node_1][vccs_num] += 1
+        Y[to_node_1][vccs_num] += -1
+        Y[from_node_2][vccs_num] += 0
+        Y[to_node_2][vccs_num] += 0
+    return Y
+
+
+def cccs_stamp(Y, num_nets, elements):
+    for i, element in enumerate(elements):
+        from_node_1 = element["from_1"]
+        to_node_1 = element["to_1"]
+        from_node_2 = element["from_2"]
+        to_node_2 = element["to_2"]
+        cccs_num = num_nets + i + 1
+        A = element["value"] * Convert_unit_to_value[element["unit"]]
+
+        # TODO : construct 'v' vector
+        Y[cccs_num][from_node_2] += 1
+        Y[cccs_num][to_node_2] += -1
+        Y[cccs_num][from_node_1] += 0
+        Y[cccs_num][to_node_1] += 0
+
+        Y[from_node_1][cccs_num] += A
+        Y[to_node_1][cccs_num] += -A
+        Y[from_node_2][cccs_num] += 1
+        Y[to_node_2][cccs_num] += -1
+
+    return Y
+
+
+def ccvs_stamp(Y, num_nets, elements):
+    for i, element in enumerate(elements):
+        from_node_1 = element["from_1"]
+        to_node_1 = element["to_1"]
+        from_node_2 = element["from_2"]
+        to_node_2 = element["to_2"]
+        ccvs_num = num_nets + i + 1
+        Rm = element["value"] * Convert_unit_to_value[element["unit"]]
+
+        # TODO : construct 'v' vector
+        Y[ccvs_num][from_node_2] += 1
+        Y[ccvs_num][to_node_2] += -1
+        Y[ccvs_num][from_node_1] += 0
+        Y[ccvs_num][to_node_1] += 0
+
+        Y[from_node_1][ccvs_num] += 0
+        Y[to_node_1][ccvs_num] += 0
+        Y[from_node_2][ccvs_num] += 1
+        Y[to_node_2][ccvs_num] += -1
+
+        Y[ccvs_num+1][from_node_2] += 0
+        Y[ccvs_num+1][to_node_2] += 0
+        Y[ccvs_num+1][from_node_1] += 1
+        Y[ccvs_num+1][to_node_1] += -1
+        Y[ccvs_num+1][ccvs_num] += -Rm
+
+        Y[from_node_1][ccvs_num+1] += 1
+        Y[to_node_1][ccvs_num+1] += -1
+        Y[from_node_2][ccvs_num+1] += 0
+        Y[to_node_2][ccvs_num+1] += 0
+
+    return Y

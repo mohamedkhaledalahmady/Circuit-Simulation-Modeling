@@ -6,7 +6,7 @@ def Resistor_Regx(resistor_line: str) -> bool:
     """
     This Function determine if resistor line match standard of netlist structure or not
     """
-    pattern = r"^[A-Z|a-z|_][^\s]*\s+(R|r)esistor\s+\d+\s+\d+\s+\d+(\s*|(T|G|M|K|k))\s*$"
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(R|r)esistor\s+\d+\s+\d+\s+\d+(\s*|(T|G|M|K|k|m))\s*$"
     return False if re.match(pattern, resistor_line) == None else True
 
 def Capacitor_Regx(capacitor_line: str) -> bool:
@@ -43,3 +43,24 @@ def VCCS_Regx(vccs_line: str) -> bool:
     """
     pattern = r"^[A-Z|a-z|_][^\s]*\s+(V|v)ccs\s+\d+\s+\d+\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
     return False if re.match(pattern, vccs_line) == None else True
+
+def VCVS_Regx(vcvs_line: str) -> bool:
+    """
+    This Function determine if vcvs_line match standard of netlist structure or not
+    """
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(V|v)cvs\s+\d+\s+\d+\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
+    return False if re.match(pattern, vcvs_line) == None else True
+
+def CCCS_Regx(cccs_line: str) -> bool:
+    """
+    This Function determine if cccs_line match standard of netlist structure or not
+    """
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(C|c)ccs\s+\d+\s+\d+\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
+    return False if re.match(pattern, cccs_line) == None else True
+
+def CCVS_Regx(ccvs_line: str) -> bool:
+    """
+    This Function determine if ccvs_line match standard of netlist structure or not
+    """
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(C|c)cvs\s+\d+\s+\d+\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
+    return False if re.match(pattern, ccvs_line) == None else True
