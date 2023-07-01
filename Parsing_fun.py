@@ -93,8 +93,8 @@ def Current_dc_Parsing(current_dc_line: str) -> Dict:
 
 def VCCS_Parsing(vccs_line: str) -> Dict:
     """
-    This Function parse current_dc_line to its parameters into dictionary as follows
-    dict={"instance_name", "component_type", "from", "to", "type", "value", "unit"}
+    This Function parse vccs_line to its parameters into dictionary as follow
+    dict={"instance_name", "component_type", "from_1", "to_1", "from_2", "to_2", "type", "value", "unit"}
     """
     vccs_line_split = vccs_line.split()
     dict = {
@@ -108,6 +108,65 @@ def VCCS_Parsing(vccs_line: str) -> Dict:
         "type": vccs_line_split[6],
         "value": int(vccs_line_split[7][:-1]) if not vccs_line_split[7][-1].isdigit() else int(vccs_line_split[7]),
         "unit": vccs_line_split[7][-1] if not vccs_line_split[7][-1].isdigit() else "nothing"
+    }
+    return dict
+
+
+def VCVS_Parsing(vcvs_line: str) -> Dict:
+    """
+    This Function parse vcvs_line to its parameters into dictionary as follow
+    dict={"instance_name", "component_type", "from_1", "to_1", "from_2", "to_2", "type", "value", "unit"}
+    """
+    vcvs_line_split = vcvs_line.split()
+    dict = {
+        "instance_name": vcvs_line_split[0],
+        "component_type": vcvs_line_split[1],
+        "from_1": int(vcvs_line_split[2]),
+        "to_1": int(vcvs_line_split[3]),
+        "from_2": int(vcvs_line_split[4]),
+        "to_2": int(vcvs_line_split[5]),
+        "type": vcvs_line_split[6],
+        "value": int(vcvs_line_split[7][:-1]) if not vcvs_line_split[7][-1].isdigit() else int(vcvs_line_split[7]),
+        "unit": vcvs_line_split[7][-1] if not vcvs_line_split[7][-1].isdigit() else "nothing"
+    }
+    return dict
+
+
+def CCCS_Parsing(cccs_line: str) -> Dict:
+    """
+    This Function parse cccs_line to its parameters into dictionary as follow
+    dict={"instance_name", "component_type", "from_1", "to_1", "from_2", "to_2", "type", "value", "unit"}
+    """
+    cccs_line_split = cccs_line.split()
+    dict = {
+        "instance_name": cccs_line_split[0],
+        "component_type": cccs_line_split[1],
+        "from_1": int(cccs_line_split[2]),
+        "to_1": int(cccs_line_split[3]),
+        "from_2": int(cccs_line_split[4]),
+        "to_2": int(cccs_line_split[5]),
+        "type": cccs_line_split[6],
+        "value": int(cccs_line_split[7][:-1]) if not cccs_line_split[7][-1].isdigit() else int(cccs_line_split[7]),
+        "unit": cccs_line_split[7][-1] if not cccs_line_split[7][-1].isdigit() else "nothing"
+    }
+    return dict
+
+def CCVS_Parsing(ccvs_line: str) -> Dict:
+    """
+    This Function parse ccvs_line to its parameters into dictionary as follow
+    dict={"instance_name", "component_type", "from_1", "to_1", "from_2", "to_2", "type", "value", "unit"}
+    """
+    ccvs_line_split = ccvs_line.split()
+    dict = {
+        "instance_name": ccvs_line_split[0],
+        "component_type": ccvs_line_split[1],
+        "from_1": int(ccvs_line_split[2]),
+        "to_1": int(ccvs_line_split[3]),
+        "from_2": int(ccvs_line_split[4]),
+        "to_2": int(ccvs_line_split[5]),
+        "type": ccvs_line_split[6],
+        "value": int(ccvs_line_split[7][:-1]) if not ccvs_line_split[7][-1].isdigit() else int(ccvs_line_split[7]),
+        "unit": ccvs_line_split[7][-1] if not ccvs_line_split[7][-1].isdigit() else "nothing"
     }
     return dict
 
@@ -135,7 +194,10 @@ def parser(content: str) -> Dict:
                     "isource_list": [],
                     "capacitor_list": [],
                     "inductor_list": [],
-                    "vccs_list": []
+                    "vccs_list": [],
+                    "vcvs_list": [],
+                    "cccs_list": [],
+                    "ccvs_list": []
                     }
     for i, val in enumerate(content):
         if '//' not in val:
@@ -155,6 +217,12 @@ def parser(content: str) -> Dict:
             circuit_dict["isource_list"].append(Current_dc_Parsing(val))
         elif VCCS_Regx(val):
             circuit_dict["vccs_list"].append(VCCS_Parsing(val))
+        elif VCVS_Regx(val):
+            circuit_dict["vcvs_list"].append(VCVS_Parsing(val))
+        elif CCCS_Regx(val):
+            circuit_dict["cccs_list"].append(CCCS_Parsing(val))
+        elif CCVS_Regx(val):
+            circuit_dict["ccvs_list"].append(CCVS_Parsing(val))                        
         else:
             pass
             # TODO: Do something notify for error
