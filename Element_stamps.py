@@ -55,8 +55,8 @@ def idc_stamp(J, elements):
         to_node = element["to"]
         I_value = element["value"] * Convert_unit_to_value[element["unit"]]
 
-        J[from_node] = -I_value
-        J[to_node] = I_value
+        J[from_node] += -I_value
+        J[to_node] += I_value
     return J
 
 

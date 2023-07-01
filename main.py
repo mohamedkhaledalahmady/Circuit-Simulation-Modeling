@@ -6,5 +6,6 @@ from Solution import Solve_Linear_Matrix
 
 
 Circuit_Matrix = parser(read_file('Netlist_1.txt', list))
+pprint.pprint(Circuit_Matrix)
 Y, J = matrix_formulation(Circuit_Matrix)
 print(Solve_Linear_Matrix(Y, J))
