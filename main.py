@@ -9,6 +9,8 @@ from Solution import Solve_Linear_Matrix
 
 ########################### Netlist Parsing ####################### 
 Circuit_Matrix = parser(read_file('Netlist_2.txt', list))
+pprint.pprint(Circuit_Matrix)
+
 if Circuit_Matrix["analysis"][0]["analysis_type"] == "dc":
 ########################### DC Analysis ########################### 
     Y, J = matrix_formulation_OP(Circuit_Matrix)
@@ -30,9 +32,10 @@ elif Circuit_Matrix["analysis"][0]["analysis_type"] == "ac":
         i += 1
 
     plt.plot(frequencies, 20*np.log10(v[1, :]), 'r')
+    # plt.plot(frequencies, v[1, :], 'r')
     plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Amplitude (dB)')
-    plt.title('Vout Frequency Response')
+    plt.ylabel('Amplitude')
+    plt.title('Parallel Resonant BPF')
     plt.xscale('log')
     plt.grid(True)
     plt.show()

@@ -1,9 +1,7 @@
-// Library name: Cadence_Lib_Test
-// Cell name: RC_Filter
-// View name: schematic
-AC_Analysis ac 1 1K 200
-// DC_Analysis dc
-// Tan_Analysis tran 20u
-R1 resistor 1 2 1
-C2 capacitor 2 0 10m
-Vdc vsource 1 0 ac 1
+// parallel resonant bandpass filter
+R1 resistor 1 2 500
+R_load resistor 2 0 1K
+C1 capacitor 2 0 10u
+L1 inductor 2 0 100m
+Vin vsource 0 1 ac 1
+AC_Analysis ac 20 400 1000

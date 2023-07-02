@@ -39,7 +39,7 @@ def cap_stamp(Y : np.array , elements : List[Dict], simulation : Dict):
 
 def ind_stamp(Y : np.array,J : np.array , elements : List[Dict], simulation : Dict):
 
-    if simulation["type"] == "OP":
+    if simulation["type"] == "op":
         num_nets = simulation["num_nets_for_ind"]
         for i, element in enumerate(elements):
             from_node = element["from"]
@@ -53,8 +53,8 @@ def ind_stamp(Y : np.array,J : np.array , elements : List[Dict], simulation : Di
             Y[ind_num][from_node] = 1
             J[ind_num] = 0
 
-    elif simulation["type"] == "AC":
-        W = simulation["freq"]
+    elif simulation["type"] == "ac":
+        W = 2*np.pi*simulation["freq"]
         for element in elements:
             from_node = element["from"]
             to_node = element["to"]

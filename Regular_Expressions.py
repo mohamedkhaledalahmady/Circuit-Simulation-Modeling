@@ -13,7 +13,7 @@ def Capacitor_Regx(capacitor_line: str) -> bool:
     """
     This Function determine if capacitor line match standard of netlist structure or not
     """
-    pattern = r"^[A-Z|a-z|_][^\s]*\s+(C|c)apacitor\s+\d+\s+\d+\s+\d+(\s*|(m|u|p|f))\s*$"
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(C|c)apacitor\s+\d+\s+\d+\s+\d+(\s*|(m|u|n|p|f))\s*$"
     return False if re.match(pattern, capacitor_line) == None else True
 
 def Inductor_Regx(voltage_dc_line: str) -> bool:
