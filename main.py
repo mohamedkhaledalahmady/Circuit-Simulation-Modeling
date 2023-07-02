@@ -1,3 +1,4 @@
+import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 from File_fun import read_file
@@ -8,7 +9,6 @@ from Solution import Solve_Linear_Matrix
 
 ########################### Netlist Parsing ####################### 
 Circuit_Matrix = parser(read_file('Netlist_2.txt', list))
-
 if Circuit_Matrix["analysis"][0]["analysis_type"] == "dc":
 ########################### DC Analysis ########################### 
     Y, J = matrix_formulation_OP(Circuit_Matrix)
@@ -21,8 +21,6 @@ elif Circuit_Matrix["analysis"][0]["analysis_type"] == "ac":
     to_frequency = Circuit_Matrix["analysis"][0]["freq_stop"] * Convert_unit_to_value[Circuit_Matrix["analysis"][0]["freq_stop_unit"]]
     number_of_decades = int(np.log10(to_frequency/from_frequency))
     number_of_frequencies = Circuit_Matrix["analysis"][0]["points_per_dec"]*number_of_decades
-    print(number_of_decades)
-    print(number_of_frequencies)
     v = np.zeros([n, number_of_frequencies])
     frequencies = np.linspace(start=from_frequency, stop=to_frequency, num=number_of_frequencies)
     i = 0
