@@ -151,6 +151,7 @@ def CCCS_Parsing(cccs_line: str) -> Dict:
     }
     return dict
 
+
 def CCVS_Parsing(ccvs_line: str) -> Dict:
     """
     This Function parse ccvs_line to its parameters into dictionary as follow
@@ -167,6 +168,52 @@ def CCVS_Parsing(ccvs_line: str) -> Dict:
         "type": ccvs_line_split[6],
         "value": int(ccvs_line_split[7][:-1]) if not ccvs_line_split[7][-1].isdigit() else int(ccvs_line_split[7]),
         "unit": ccvs_line_split[7][-1] if not ccvs_line_split[7][-1].isdigit() else "nothing"
+    }
+    return dict
+
+
+def DC_Analysis_Parsing(dc_analysis_line: str) -> Dict:
+    """
+    This Function parse dc_analysis_line to its parameters into dictionary as follow
+    dict={"analysis_name", "analysis_type"}
+    """
+    dc_analysis_line_split = dc_analysis_line.split()
+    dict = {
+        "analysis_name": dc_analysis_line_split[0],
+        "analysis_type": dc_analysis_line_split[1]
+    }
+    return dict
+
+
+def AC_Analysis_Parsing(ac_analysis_line: str) -> Dict:
+    """
+    This Function parse ac_analysis_line to its parameters into dictionary as follow
+    dict={"analysis_name", "analysis_type", "freq_start", "freq_start_unit", "freq_stop", "freq_stop_unit", "points_per_dec"}
+    """
+    ac_analysis_line_split = ac_analysis_line.split()
+    dict = {
+        "analysis_name": ac_analysis_line_split[0],
+        "analysis_type": ac_analysis_line_split[1],
+        "freq_start": int(ac_analysis_line_split[2][:-1]) if not ac_analysis_line_split[2][-1].isdigit() else int(ac_analysis_line_split[2]),
+        "freq_start_unit": ac_analysis_line_split[2][-1] if not ac_analysis_line_split[2][-1].isdigit() else "nothing",
+        "freq_stop": int(ac_analysis_line_split[3][:-1]) if not ac_analysis_line_split[3][-1].isdigit() else int(ac_analysis_line_split[3]),
+        "freq_stop_unit": ac_analysis_line_split[3][-1] if not ac_analysis_line_split[3][-1].isdigit() else "nothing",
+        "points_per_dec": int(ac_analysis_line_split[4])
+    }
+    return dict
+
+
+def Tran_Analysis_Parsing(tran_analysis_line: str) -> Dict:
+    """
+    This Function parse tran_analysis_line to its parameters into dictionary as follow
+    dict={"analysis_name", "analysis_type", "stop_time", "stop_time_unit"}
+    """
+    tran_analysis_line_split = tran_analysis_line.split()
+    dict = {
+        "analysis_name": tran_analysis_line_split[0],
+        "analysis_type": tran_analysis_line_split[1],
+        "stop_time": int(tran_analysis_line_split[2][:-1]) if not tran_analysis_line_split[2][-1].isdigit() else int(tran_analysis_line_split[2]),
+        "stop_time_unit": tran_analysis_line_split[2][-1] if not tran_analysis_line_split[2][-1].isdigit() else "nothing"
     }
     return dict
 
@@ -188,17 +235,19 @@ def Get_Number_of_Nets(circuit_dict: dict) -> int:
 
 def parser(content: str) -> Dict:
     content_without_dashed_lines = []
-    circuit_dict = {"num_nets": int,
-                    "resistor_list": [],
-                    "vsource_list": [],
-                    "isource_list": [],
-                    "capacitor_list": [],
-                    "inductor_list": [],
-                    "vccs_list": [],
-                    "vcvs_list": [],
-                    "cccs_list": [],
-                    "ccvs_list": []
-                    }
+    circuit_dict = {
+        "analysis": [],
+        "num_nets": int,
+        "resistor_list": [],
+        "vsource_list": [],
+        "isource_list": [],
+        "capacitor_list": [],
+        "inductor_list": [],
+        "vccs_list": [],
+        "vcvs_list": [],
+        "cccs_list": [],
+        "ccvs_list": []
+    }
     for i, val in enumerate(content):
         if '//' not in val:
             val = val+' ' if i != len(content)-1 else val
@@ -222,7 +271,13 @@ def parser(content: str) -> Dict:
         elif CCCS_Regx(val):
             circuit_dict["cccs_list"].append(CCCS_Parsing(val))
         elif CCVS_Regx(val):
-            circuit_dict["ccvs_list"].append(CCVS_Parsing(val))                        
+            circuit_dict["ccvs_list"].append(CCVS_Parsing(val))
+        elif DC_Analysis_Regx(val):
+            circuit_dict["analysis"].append(DC_Analysis_Parsing(val))
+        elif AC_Analysis_Regx(val):
+            circuit_dict["analysis"].append(AC_Analysis_Parsing(val))
+        elif Tran_Analysis_Regx(val):
+            circuit_dict["analysis"].append(Tran_Analysis_Parsing(val))
         else:
             pass
             # TODO: Do something notify for error

@@ -7,7 +7,8 @@ def matrix_formulation_OP(elements):
         + elements["cccs_list"].__len__() + 2*elements["ccvs_list"].__len__()
     Y = np.zeros([n+1, n+1])
     J = np.zeros([n+1, 1])
-    simulation = {"type": "op",
+    simulation = {
+                  "type": "op",
                   "num_nets_for_vsource": elements["num_nets"],
                   "num_nets_for_ind": elements["num_nets"] + elements["vsource_list"].__len__(),
                   "num_nets_for_vcvs": elements["num_nets"] + elements["vsource_list"].__len__() + elements["inductor_list"].__len__(),
