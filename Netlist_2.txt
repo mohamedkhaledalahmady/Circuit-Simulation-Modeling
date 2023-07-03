@@ -31,3 +31,9 @@ AC_Analysis ac 10K 400K 1000
 // L1 inductor 2 0 100m
 // Vin vsource 0 1 ac 1
 // AC_Analysis ac 20 400 1000
+// Tan_Analysis tran 20u
+R1 resistor 2 1 1
+C2 capacitor 2 0 10m
+R3 resistor 3 0 1
+L4 capacitor 2 3 10m
+Vdc vsource 1 0 ac 1

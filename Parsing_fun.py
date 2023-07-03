@@ -90,7 +90,6 @@ def Current_dc_Parsing(current_dc_line: str) -> Dict:
     }
     return dict
 
-
 def VCCS_Parsing(vccs_line: str) -> Dict:
     """
     This Function parse vccs_line to its parameters into dictionary as follow
@@ -111,7 +110,6 @@ def VCCS_Parsing(vccs_line: str) -> Dict:
     }
     return dict
 
-
 def VCVS_Parsing(vcvs_line: str) -> Dict:
     """
     This Function parse vcvs_line to its parameters into dictionary as follow
@@ -130,7 +128,6 @@ def VCVS_Parsing(vcvs_line: str) -> Dict:
         "unit": vcvs_line_split[7][-1] if not vcvs_line_split[7][-1].isdigit() else "nothing"
     }
     return dict
-
 
 def CCCS_Parsing(cccs_line: str) -> Dict:
     """
@@ -151,7 +148,6 @@ def CCCS_Parsing(cccs_line: str) -> Dict:
     }
     return dict
 
-
 def CCVS_Parsing(ccvs_line: str) -> Dict:
     """
     This Function parse ccvs_line to its parameters into dictionary as follow
@@ -171,7 +167,6 @@ def CCVS_Parsing(ccvs_line: str) -> Dict:
     }
     return dict
 
-
 def DC_Analysis_Parsing(dc_analysis_line: str) -> Dict:
     """
     This Function parse dc_analysis_line to its parameters into dictionary as follow
@@ -183,7 +178,6 @@ def DC_Analysis_Parsing(dc_analysis_line: str) -> Dict:
         "analysis_type": dc_analysis_line_split[1]
     }
     return dict
-
 
 def AC_Analysis_Parsing(ac_analysis_line: str) -> Dict:
     """
@@ -202,7 +196,6 @@ def AC_Analysis_Parsing(ac_analysis_line: str) -> Dict:
     }
     return dict
 
-
 def Tran_Analysis_Parsing(tran_analysis_line: str) -> Dict:
     """
     This Function parse tran_analysis_line to its parameters into dictionary as follow
@@ -217,27 +210,36 @@ def Tran_Analysis_Parsing(tran_analysis_line: str) -> Dict:
     }
     return dict
 
-
-def Get_Number_of_Nets(circuit_dict: dict) -> int:
+def Get_Number_of_Nets(circuit_dict: dict) -> [int ,Dict] :
+    # TODO : change the name of the function ;)
     """
     This Function determine and return the number of nets in the circuit
     """
     number_of_nets = 0
+    net_dict = {}
     for i, val in enumerate(circuit_dict):
-        if circuit_dict[val] != [] and circuit_dict[val] != int:
+        if circuit_dict[val] != [] and circuit_dict[val] != int and circuit_dict[val] != {} and val != "analysis":
             for j, v in enumerate(circuit_dict[val]):
+                net1 = circuit_dict[val][j]['from']
+                net2 = circuit_dict[val][j]['to']
                 number_of_nets = max(
                     number_of_nets, circuit_dict["resistor_list"][j]['from'], circuit_dict["resistor_list"][j]['to'])
+
+                net_dict[f"net_{net1}"] = net1
+                net_dict[f"net_{net2}"] = net2
         else:
             pass
-    return number_of_nets
+    return number_of_nets ,net_dict
 
 
-def parser(content: str) -> Dict:
+
+
+def parser(content: str) -> [Dict,Dict]:
     content_without_dashed_lines = []
     circuit_dict = {
         "analysis": [],
         "num_nets": int,
+        "nets": {},
         "resistor_list": [],
         "vsource_list": [],
         "isource_list": [],
@@ -281,5 +283,5 @@ def parser(content: str) -> Dict:
         else:
             pass
             # TODO: Do something notify for error
-    circuit_dict["num_nets"] = 4 #Get_Number_of_Nets(circuit_dict)
+    circuit_dict["num_nets"],circuit_dict["nets"] = Get_Number_of_Nets(circuit_dict)
     return circuit_dict
