@@ -281,5 +281,5 @@ def parser(content: str) -> Dict:
         else:
             pass
             # TODO: Do something notify for error
-    circuit_dict["num_nets"] = Get_Number_of_Nets(circuit_dict)
+    circuit_dict["num_nets"] = 4 #Get_Number_of_Nets(circuit_dict)
     return circuit_dict

@@ -1,7 +1,33 @@
+// Eliptic filter
+R1 resistor 1 2 75
+Rl resistor 4 0 75
+C1 capacitor 2 0 296p
+C2 capacitor 2 3 9100f
+C3 capacitor 3 0 631p
+C4 capacitor 3 4 24400f
+C5 capacitor 4 0 282p
+L2 inductor 2 3 3u
+L4 inductor 3 4 2860n
+Vin vsource 1 0 dc 1
+// AC_Analysis ac 100K 100M 1000
+DC_Analysis dc
+
+
+// fourth order BPF
+R1 resistor 1 2 1K
+R6 resistor 4 0 1K
+C3 capacitor 2 0 11250p
+C5 capacitor 3 4 225p
+L2 inductor 2 0 255u
+L4 inductor 2 3 11250u
+Vin vsource 1 0 ac 1
+AC_Analysis ac 10K 400K 1000
+// DC_Analysis dc
+
 // parallel resonant bandpass filter
-R1 resistor 1 2 500
-R_load resistor 2 0 1K
-C1 capacitor 2 0 10u
-L1 inductor 2 0 100m
-Vin vsource 0 1 ac 1
-AC_Analysis ac 20 400 1000
+// R1 resistor 1 2 500
+// R_load resistor 2 0 1K
+// C1 capacitor 2 0 10u
+// L1 inductor 2 0 100m
+// Vin vsource 0 1 ac 1
+// AC_Analysis ac 20 400 1000

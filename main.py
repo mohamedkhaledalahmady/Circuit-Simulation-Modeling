@@ -31,8 +31,8 @@ elif Circuit_Matrix["analysis"][0]["analysis_type"] == "ac":
         v[:, i, np.newaxis] = Solve_Linear_Matrix(Y, J)
         i += 1
 
-    plt.plot(frequencies, 20*np.log10(v[1, :]), 'r')
-    # plt.plot(frequencies, v[1, :], 'r')
+    plt.plot(frequencies, 20*np.log10(v[3, :]), 'r')
+    # plt.plot(frequencies, v[3, :], 'r')
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Amplitude')
     plt.title('Parallel Resonant BPF')
