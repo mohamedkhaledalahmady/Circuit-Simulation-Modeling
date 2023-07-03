@@ -4,6 +4,8 @@
 AC_Analysis ac 1 1K 200
 // DC_Analysis dc
 // Tan_Analysis tran 20u
-R1 resistor 1 2 1
+R1 resistor 2 1 1
 C2 capacitor 2 0 10m
+R3 resistor 3 0 1
+L4 capacitor 2 3 10m
 Vdc vsource 1 0 ac 1
