@@ -210,36 +210,37 @@ def Tran_Analysis_Parsing(tran_analysis_line: str) -> Dict:
     }
     return dict
 
-def Get_Number_of_Nets(circuit_dict: dict) -> [int ,Dict] :
+def Plot_Output_Parsing(plot_output_line: str) -> str:
+    """
+    This Function parse plot_output_line to its parameters into dictionary as follow
+    dict={"plot_name"}
+    """
+    plot_output_line_split = plot_output_line.split()
+    return plot_output_line_split[1]
+
+def Get_Number_of_Nets(circuit_dict: dict): # -> [int ,Dict] :
     # TODO : change the name of the function ;)
     """
     This Function determine and return the number of nets in the circuit
     """
     number_of_nets = 0
-    net_dict = {}
     for i, val in enumerate(circuit_dict):
-        if circuit_dict[val] != [] and circuit_dict[val] != int and circuit_dict[val] != {} and val != "analysis":
+        if circuit_dict[val] != [] and val != "num_nets" and val != "analysis" and val != 'plot_name':
             for j, v in enumerate(circuit_dict[val]):
-                net1 = circuit_dict[val][j]['from']
-                net2 = circuit_dict[val][j]['to']
-                number_of_nets = max(
-                    number_of_nets, circuit_dict["resistor_list"][j]['from'], circuit_dict["resistor_list"][j]['to'])
-
-                net_dict[f"net_{net1}"] = net1
-                net_dict[f"net_{net2}"] = net2
+                dependent_sources = ['vccs', 'vcvs', 'cccs', 'ccvs']
+                if v['component_type'] not in dependent_sources:
+                    number_of_nets = max(number_of_nets, v['from'], v['to'])
+                else:
+                    number_of_nets = max(number_of_nets, v['from_1'], v['to_1'], v['from_2'], v['to_2'])
         else:
             pass
-    return number_of_nets ,net_dict
+    return number_of_nets
 
-
-
-
-def parser(content: str) -> [Dict,Dict]:
+def parser(content: str) -> Dict:
     content_without_dashed_lines = []
     circuit_dict = {
         "analysis": [],
         "num_nets": int,
-        "nets": {},
         "resistor_list": [],
         "vsource_list": [],
         "isource_list": [],
@@ -248,7 +249,8 @@ def parser(content: str) -> [Dict,Dict]:
         "vccs_list": [],
         "vcvs_list": [],
         "cccs_list": [],
-        "ccvs_list": []
+        "ccvs_list": [], 
+        "plot_name": str
     }
     for i, val in enumerate(content):
         if '//' not in val:
@@ -280,8 +282,10 @@ def parser(content: str) -> [Dict,Dict]:
             circuit_dict["analysis"].append(AC_Analysis_Parsing(val))
         elif Tran_Analysis_Regx(val):
             circuit_dict["analysis"].append(Tran_Analysis_Parsing(val))
+        elif Plot_Output_Regx(val):
+            circuit_dict["plot_name"] = Plot_Output_Parsing(val)           
         else:
             pass
             # TODO: Do something notify for error
-    circuit_dict["num_nets"],circuit_dict["nets"] = Get_Number_of_Nets(circuit_dict)
+    circuit_dict["num_nets"] = Get_Number_of_Nets(circuit_dict)
     return circuit_dict
