@@ -18,7 +18,6 @@ def Resistor_Parsing(resistor_line: str) -> Dict:
     }
     return dict
 
-
 def Capacitor_Parsing(capacitor_line: str) -> Dict:
     """
     This Function parse capacitor_line to its parameters into dictionary as follow
@@ -35,7 +34,6 @@ def Capacitor_Parsing(capacitor_line: str) -> Dict:
     }
     return dict
 
-
 def Inductor_Parsing(inductor_line: str) -> Dict:
     """
     This Function parse inductor_line to its parameters into dictionary as follow
@@ -51,7 +49,6 @@ def Inductor_Parsing(inductor_line: str) -> Dict:
         "unit": inductor_line_split[4][-1] if not inductor_line_split[4][-1].isdigit() else "nothing"
     }
     return dict
-
 
 def Voltage_dc_Parsing(voltage_dc_line: str) -> Dict:
     """
@@ -70,7 +67,6 @@ def Voltage_dc_Parsing(voltage_dc_line: str) -> Dict:
         "unit": voltage_dc_line_split[5][-1] if not voltage_dc_line_split[5][-1].isdigit() else "nothing"
     }
     return dict
-
 
 def Current_dc_Parsing(current_dc_line: str) -> Dict:
     """
@@ -198,13 +194,14 @@ def AC_Analysis_Parsing(ac_analysis_line: str) -> Dict:
 
 def Tran_Analysis_Parsing(tran_analysis_line: str) -> Dict:
     """
-    This Function parse tran_analysis_line to its parameters into dictionary as follow
+    This Function parse tran_analysis_line to its parameters into dictionary as follows
     dict={"analysis_name", "analysis_type", "stop_time", "stop_time_unit"}
     """
     tran_analysis_line_split = tran_analysis_line.split()
     dict = {
         "analysis_name": tran_analysis_line_split[0],
         "analysis_type": tran_analysis_line_split[1],
+        ## TODO : add time step
         "stop_time": int(tran_analysis_line_split[2][:-1]) if not tran_analysis_line_split[2][-1].isdigit() else int(tran_analysis_line_split[2]),
         "stop_time_unit": tran_analysis_line_split[2][-1] if not tran_analysis_line_split[2][-1].isdigit() else "nothing"
     }

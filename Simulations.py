@@ -13,6 +13,7 @@ def matrix_formulation_OP(elements):
     # Construct Unknown Vector 'V'
     for i in range(elements["num_nets"]):
         V.append(f"V{i+1}")
+
     simulation = {
         "type": "op",
         "num_nets_for_vsource": elements["num_nets"],
@@ -27,7 +28,7 @@ def matrix_formulation_OP(elements):
 
     # TODO : is this calling by ref ?! , so why return in stamp functions
     Element_stamps.res_stamp(Y, elements["resistor_list"])
-    Element_stamps.cap_stamp(Y, elements["capacitor_list"], simulation)
+    Element_stamps.cap_stamp(Y,J, elements["capacitor_list"], simulation)
     Element_stamps.idc_stamp(J, elements["isource_list"], simulation)
     Element_stamps.vdc_stamp(Y, V, J, elements["vsource_list"], simulation)
     Element_stamps.ind_stamp(Y, V, J, elements["inductor_list"], simulation)
@@ -64,12 +65,35 @@ def matrix_formulation_AC(elements, freq):
 
     return Y, V, J
 
+def matrix_formulation_tran(elements, time_step , old_result):
+    n = elements["num_nets"] + elements["vsource_list"].__len__() + elements["inductor_list"].__len__()
+    Y = np.zeros([n+1, n+1])
+    J = np.zeros([n+1, 1])
+    V = []
+    # Construct Unknown Vector 'V'
+    for i in range(elements["num_nets"]):
+        V.append(f"V{i+1}")
+    # TODO : is this calling by ref ?! , so why return in stamp functions
+    simulation = {
+        "type": "tran",
+        "time_step": time_step,
+        "num_nets_for_vsource": elements["num_nets"],
+        "num_nets_for_ind": elements["num_nets"] + elements["vsource_list"].__len__(),
+        "old_results" : old_result
+    }
+
+    Y = Element_stamps.res_stamp(Y, elements["resistor_list"])
+    Y,J = Element_stamps.cap_stamp(Y,J, elements["capacitor_list"], simulation)
+    J = Element_stamps.idc_stamp(J, elements["isource_list"], simulation)
+    Y, V, J = Element_stamps.vdc_stamp(Y, V, J, elements["vsource_list"], simulation)
+
+    return Y, V, J
+
 def Divide_Result_Matrix(Solution_Matrix: np.array, V: List) -> Dict:
     Result_Dict = {}
     for i in range(len(V)):
         Result_Dict[V[i]] = Solution_Matrix[i, :]
     return Result_Dict
-    
 
 def Plot_Output(Plot_name, frequencies, Result):
     plt.plot(frequencies, Result[Plot_name], 'r')

@@ -23,10 +23,10 @@ def res_stamp(Y : np.array , elements : List[Dict]):
         Y[to_node][from_node] += -1 / res_value
     return Y
 
-def cap_stamp(Y : np.array , elements : List[Dict], simulation : Dict):
-    if simulation["type"] == "op":
+def cap_stamp(Y : np.array ,J : np.array , elements : List[Dict], simulation : Dict):
+    if simulation["type"] == "op" or (simulation["type"] == "ac" and simulation["freq"] == 0):
         pass
-    elif simulation["type"] == "ac":
+    elif simulation["type"] == "ac" and simulation["freq"] != 0:
         W = 2*np.pi*simulation["freq"]
         for element in elements:
             from_node = element["from"]
@@ -36,10 +36,30 @@ def cap_stamp(Y : np.array , elements : List[Dict], simulation : Dict):
             Y[to_node][to_node] += 1j*W*cap_value
             Y[from_node][to_node] += -1j*W*cap_value
             Y[to_node][from_node] += -1j*W*cap_value
-    return Y
+    elif simulation["type"] == "tran":
+        time_step = simulation["time_step"]
+        for element in elements:
+            from_node = element["from"]
+            to_node = element["to"]
+            cap_value = (element["value"] * Convert_unit_to_value[element["unit"]])
+            res_value = time_step/ cap_value
+
+            Y[from_node][from_node] += 1 / res_value
+            Y[to_node][to_node] += 1 / res_value
+            Y[from_node][to_node] += -1 / res_value
+            Y[to_node][from_node] += -1 / res_value
+
+            results = np.vstack((np.array([0]),simulation["old_results"]))
+
+            previous_volt_drop =  float(results[from_node] - results[to_node])
+            I_value = cap_value * previous_volt_drop / time_step
+
+            J[from_node] = I_value
+            J[to_node] = -I_value
+    return Y , J
 
 def ind_stamp(Y : np.array, V: List, J : np.array , elements : List[Dict], simulation : Dict):
-    if simulation["type"] == "op":
+    if simulation["type"] == "op" or (simulation["type"] == "ac" and simulation["freq"] == 0):
         num_nets = simulation["num_nets_for_ind"]
         for i, element in enumerate(elements):
             from_node = element["from"]
@@ -55,7 +75,7 @@ def ind_stamp(Y : np.array, V: List, J : np.array , elements : List[Dict], simul
             
             J[ind_num] = 0
 
-    elif simulation["type"] == "ac":
+    elif simulation["type"] == "ac"  and simulation["freq"] != 0:
         W = 2*np.pi*simulation["freq"]
         num_nets = simulation["num_nets_for_ind"]
         for i, element in enumerate(elements):
@@ -77,56 +97,31 @@ def ind_stamp(Y : np.array, V: List, J : np.array , elements : List[Dict], simul
 def idc_stamp(J : np.array , elements : List[Dict], simulation : Dict):
 
     for element in elements:
-        if element["type"] == "dc" and simulation["type"] == "op":
-            from_node = element["from"]
-            to_node = element["to"]
-            I_value = element["value"] * Convert_unit_to_value[element["unit"]]
+        from_node = element["from"]
+        to_node = element["to"]
+        I_value = element["value"] * Convert_unit_to_value[element["unit"]]
 
-            J[from_node] += -I_value
-            J[to_node] += I_value
-        else:
-            if element["type"] == "ac" and simulation["type"] == "ac":
-                from_node = element["from"]
-                to_node = element["to"]
-                I_value = element["value"] * Convert_unit_to_value[element["unit"]]
-
-                J[from_node] = -I_value
-                J[to_node] = I_value
+        J[from_node] = -I_value
+        J[to_node] = I_value
     return J
 
 def vdc_stamp(Y : np.array,V: List, J : np.array , elements : List[Dict], simulation : Dict):
-    for i, element in enumerate(elements):
+    for i, element in enumerate(elements): ## TODO the AC is identical to the AC why if ? , also the rest of the dependent sources
         num_nets = simulation["num_nets_for_vsource"]
-        if element["type"] == "dc" and simulation["type"] == "op":
-            from_node = element["from"]
-            to_node = element["to"]
-            vdc_num = num_nets + i + 1
-            v_value = element["value"] * Convert_unit_to_value[element["unit"]]
+        from_node = element["from"]
+        to_node = element["to"]
+        vdc_num = num_nets + i + 1
+        v_value = element["value"] * Convert_unit_to_value[element["unit"]]
 
-            Y[from_node][vdc_num] = 1
-            Y[to_node][vdc_num] = -1
-            Y[vdc_num][to_node] = -1
-            Y[vdc_num][from_node] = 1
+        Y[from_node][vdc_num] = 1
+        Y[to_node][vdc_num] = -1
+        Y[vdc_num][to_node] = -1
+        Y[vdc_num][from_node] = 1
 
-            V.append("I_" + element["instance_name"])
+        V.append("I_" + element["instance_name"])
 
-            J[vdc_num] += v_value
-        else:
-            if element["type"] == "ac" and simulation["type"] == "ac":
-                from_node = element["from"]
-                to_node = element["to"]
-                vdc_num = num_nets + i + 1
-                v_value = element["value"] * Convert_unit_to_value[element["unit"]]
-
-                Y[from_node][vdc_num] = 1
-                Y[to_node][vdc_num] = -1
-                Y[vdc_num][to_node] = -1
-                Y[vdc_num][from_node] = 1
-
-                V.append("I_" + element["instance_name"])
-
-                J[vdc_num] += v_value
-    return Y, V, J
+        J[vdc_num] += v_value
+        return Y, V, J
 
 def vccs_stamp(Y : np.array, elements : List[Dict], simulation : Dict):
     for i, element in enumerate(elements):

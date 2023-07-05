@@ -23,15 +23,47 @@ elif Circuit_Matrix["analysis"][0]["analysis_type"] == "ac":
     n = Circuit_Matrix["num_nets"] + Circuit_Matrix["vsource_list"].__len__() + Circuit_Matrix["inductor_list"].__len__()
     from_frequency = Circuit_Matrix["analysis"][0]["freq_start"] * Convert_unit_to_value[Circuit_Matrix["analysis"][0]["freq_start_unit"]]
     to_frequency = Circuit_Matrix["analysis"][0]["freq_stop"] * Convert_unit_to_value[Circuit_Matrix["analysis"][0]["freq_stop_unit"]]
-    number_of_decades = int(np.log10(to_frequency/from_frequency))
+    if from_frequency == 0:
+        number_of_decades = int(np.log10(to_frequency/1)) + 1
+    else:
+        number_of_decades = int(np.log10(to_frequency / from_frequency))
     number_of_frequencies = Circuit_Matrix["analysis"][0]["points_per_dec"]*number_of_decades
     solution_vector = np.zeros([n, number_of_frequencies])
     frequencies = np.linspace(start=from_frequency, stop=to_frequency, num=number_of_frequencies)
-    i = 0
-    for frq in frequencies:
+    V = []
+    for i, frq in enumerate(frequencies):
         Y, V, J = matrix_formulation_AC(Circuit_Matrix, frq)
         solution_vector[:, i, np.newaxis] = Solve_Linear_Matrix(Y, J, "ac")
-        i += 1
     
     Result = Divide_Result_Matrix(solution_vector, V)
+    print(solution_vector)
     Plot_Output(Circuit_Matrix['plot_name'], frequencies, Result)
+
+elif Circuit_Matrix["analysis"][0]["analysis_type"] == "tran":
+########################### tran Analysis ###########################
+
+    stop_time = Circuit_Matrix["analysis"][0]["stop_time"]
+    # time_step = Circuit_Matrix["analysis"][0]["time_step"]
+    time_step = 0.01
+    steps = np.linspace(start=time_step, stop=stop_time, num=int((stop_time / time_step)))
+
+    ## first step is an op
+    n = Circuit_Matrix["num_nets"] + Circuit_Matrix["vsource_list"].__len__() + Circuit_Matrix["inductor_list"].__len__()
+    Y, V, J = matrix_formulation_OP(Circuit_Matrix)
+    Result = Solve_Linear_Matrix(Y, J, "dc")
+    solution_vector = np.zeros([n, len(steps) + 1])
+    V = []
+    solution_vector[:, 0, np.newaxis] = Result
+
+    solution_vector[1,0] =0
+    for i,step in enumerate(steps):
+        Y ,V ,J = matrix_formulation_tran(Circuit_Matrix,time_step, old_result = solution_vector[:, i,np.newaxis])
+        solution_vector[:, i + 1 , np.newaxis] = Solve_Linear_Matrix(Y, J, "op")
+
+    Result = Divide_Result_Matrix(solution_vector, V)
+    pprint.pprint(solution_vector)
+    steps = np.hstack((np.array([0]) , steps))
+    Plot_Output(Circuit_Matrix['plot_name'], steps, Result)
+
+
+

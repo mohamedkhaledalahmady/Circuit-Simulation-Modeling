@@ -1,3 +1,22 @@
+// LPF
+R1 resistor 1 2 1
+C1 capacitor 2 0 1
+Vin vsource 1 0 dc 1
+tran tran 100
+plot V2
+
+
+
+//test AC zero freq
+//R1 resistor 1 2 1
+//C2 capacitor 2 0 100m
+//L3 inductor 2 3 1
+//R1 resistor 3 0 1
+//vdc1 vsource 0 1 ac 1
+//ac ac 0 10 1000
+//plot V2
+
+
 // R1 resistor 1 2 4
 // R2 resistor 2 3 4
 // R3 resistor 3 0 8
@@ -59,7 +78,7 @@
 // L1 inductor 1 2 1m
 // C1 capacitor 1 2 1p
 // Vin vsource 1 0 ac 1
-// ac ac 1 200 2000 
+// ac ac 1 200 2000
 // plot I_Vin
 // dcOp dc
 
