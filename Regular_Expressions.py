@@ -65,6 +65,13 @@ def CCVS_Regx(ccvs_line: str) -> bool:
     pattern = r"^[A-Z|a-z|_][^\s]*\s+(C|c)cvs\s+\d+\s+\d+\s+\d+\s+\d+\s+(dc|ac)\s+\d+(\s*|m|u)\s*$"
     return False if re.match(pattern, ccvs_line) == None else True
 
+def OPAMP_Regx(opamp_line: str) -> bool:
+    """
+    This Function determine if opamp_line match standard of netlist structure or not
+    """
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(O|o)pamp\s+\d+\s+\d+\s+\d+\s*$"
+    return False if re.match(pattern, opamp_line) == None else True
+
 def DC_Analysis_Regx(dc_analysis_line: str) -> bool:
     """
     This Function determine if dc_analysis_line match standard of netlist structure or not

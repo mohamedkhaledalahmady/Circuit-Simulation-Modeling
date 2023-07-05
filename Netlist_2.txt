@@ -1,8 +1,57 @@
-//op test
-//R1 resistor 1 2 1
-//R2 resistor 2 0 2
-//Vdc vsource 1 0 dc 1
-//dcOp dc
+// 5th order 1dB Ripple Chebycheve HPF
+C1 capacitor 1 2 10n
+C2 capacitor 2 3 10n
+R1 resistor 2 4 3612
+R2 resistor 3 0 28170
+Opamp1 opamp 3 4 4
+
+C3 capacitor 4 5 10n
+C4 capacitor 5 6 10n
+R3 resistor 5 7 1380
+R4 resistor 6 0 170219
+Opamp2 opamp 6 7 7
+
+C5 capacitor 7 8 10n
+R5 resistor 8 0 4456
+Opamp1 opamp 8 9 9
+
+V vsource 1 0 dc 1
+// dcOp dc 
+// ac ac 100 10K 100
+tran tran 100m 10
+plot V9
+
+// 4th order butterworth LPF
+// R1 resistor 1 2 1K
+// R2 resistor 2 3 1K
+// C1 capacitor 3 0 147n
+// C2 capacitor 2 4 171n
+// Opamp opamp 3 4 4
+// R3 resistor 4 5 1K
+// R4 resistor 5 6 1K
+// C3 capacitor 6 0 60900p
+// C4 capacitor 5 7 415n
+// Opamp opamp 6 7 7
+// V vsource 1 0 ac 1
+// dcOp dc
+// ac ac 10 10K 2000
+// plot V7
+
+// LPF Amplifier
+// R1 resistor 1 2 1K
+// R2 resistor 2 3 2K
+// C2 capacitor 2 3 1u
+// Opamp opamp 0 2 3 
+// V vsource 1 0 ac 1
+// ac ac 1 1K 200
+// plot V1 V2 V3
+// dcOp dc
+
+// op test
+// R1 resistor 1 2 1
+// R2 resistor 2 0 2
+// Vdc vsource 1 0 dc 1
+// dcOp dc
 
 // V1 vsource 1 0 ac 1
 // C1 capacitor 1 0 10u
@@ -31,12 +80,12 @@
 // plot V3
 // dcOp dc
 
-//test AC zero freq
-//R1 resistor 1 2 1
-//L3 inductor 2 0 10
-//vdc1 vsource 1 0 ac 1
-//ac ac 0 1000 1000
-//plot V2
+// test AC zero freq
+// R1 resistor 1 2 1
+// L3 inductor 2 0 10
+// vdc1 vsource 1 0 ac 1
+// ac ac 0 1000 1000
+// plot V2
 
 
 // R1 resistor 1 2 4
@@ -48,12 +97,12 @@
 // dcOp dc
 
 // CCCS
-//R1 resistor 2 3 3
-//R2 resistor 3 4 500m
-//R3 resistor 4 0 6
-//Idc isource 0 1 dc 1500m
-//Idep cccs 4 3 1 2 dc 2
-//dcOp dc
+// R1 resistor 2 3 3
+// R2 resistor 3 4 500m
+// R3 resistor 4 0 6
+// Idc isource 0 1 dc 1500m
+// Idep cccs 4 3 1 2 dc 2
+// dcOp dc
 
 // R1 resistor 1 2 1K
 // R2 resistor 2 3 1200

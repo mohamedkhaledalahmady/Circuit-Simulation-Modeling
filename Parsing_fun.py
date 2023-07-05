@@ -163,6 +163,21 @@ def CCVS_Parsing(ccvs_line: str) -> Dict:
     }
     return dict
 
+def OPAMP_Parsing(opamp_line: str) -> Dict:
+    """
+    This Function parse opamp_line to its parameters into dictionary as follow
+    dict={"instance_name", "component_type", "neg_terminal", "pos_terminal", "out_terminal"}
+    """
+    opamp_line_split = opamp_line.split()
+    dict = {
+        "instance_name": opamp_line_split[0],
+        "component_type": opamp_line_split[1],
+        "neg_terminal": int(opamp_line_split[2]),
+        "pos_terminal": int(opamp_line_split[3]),
+        "out_terminal": int(opamp_line_split[4]),
+    }
+    return dict
+
 def DC_Analysis_Parsing(dc_analysis_line: str) -> Dict:
     """
     This Function parse dc_analysis_line to its parameters into dictionary as follow
@@ -229,9 +244,11 @@ def Get_Number_of_Nets(circuit_dict: dict): # -> [int ,Dict] :
     for i, val in enumerate(circuit_dict):
         if circuit_dict[val] != [] and val != "num_nets" and val != "analysis" and val != 'plot_name':
             for j, v in enumerate(circuit_dict[val]):
-                dependent_sources = ['vccs', 'vcvs', 'cccs', 'ccvs']
-                if v['component_type'] not in dependent_sources:
+                different_component = ['vccs', 'vcvs', 'cccs', 'ccvs', 'opamp']
+                if v['component_type'] not in different_component:
                     number_of_nets = max(number_of_nets, v['from'], v['to'])
+                elif v['component_type'] == 'opamp':
+                    number_of_nets = max(number_of_nets, v['neg_terminal'], v['pos_terminal'], v['out_terminal'])
                 else:
                     number_of_nets = max(number_of_nets, v['from_1'], v['to_1'], v['from_2'], v['to_2'])
         else:
@@ -251,6 +268,7 @@ def parser(content: str) -> Dict:
         "vccs_list": [],
         "vcvs_list": [],
         "cccs_list": [],
+        "opamp_list":[],
         "ccvs_list": [], 
         "plot_name": []
     }
@@ -278,6 +296,8 @@ def parser(content: str) -> Dict:
             circuit_dict["cccs_list"].append(CCCS_Parsing(val))
         elif CCVS_Regx(val):
             circuit_dict["ccvs_list"].append(CCVS_Parsing(val))
+        elif OPAMP_Regx(val):
+            circuit_dict["opamp_list"].append(OPAMP_Parsing(val))  
         elif DC_Analysis_Regx(val):
             circuit_dict["analysis"].append(DC_Analysis_Parsing(val))
         elif AC_Analysis_Regx(val):
@@ -285,7 +305,7 @@ def parser(content: str) -> Dict:
         elif Tran_Analysis_Regx(val):
             circuit_dict["analysis"].append(Tran_Analysis_Parsing(val))
         elif Plot_Output_Regx(val):
-            circuit_dict["plot_name"] = Plot_Output_Parsing(val)           
+            circuit_dict["plot_name"] = Plot_Output_Parsing(val)                    
         else:
             pass
             # TODO: Do something notify for error

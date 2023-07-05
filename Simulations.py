@@ -16,7 +16,7 @@ Convert_unit_to_value = {'G': 1e9,
 
 def matrix_formulation_OP(elements):
     n = elements["num_nets"] + elements["vsource_list"].__len__() + elements["inductor_list"].__len__() + elements["vcvs_list"].__len__() \
-        + elements["cccs_list"].__len__() + 2*elements["ccvs_list"].__len__()
+        + elements["cccs_list"].__len__() + 2*elements["ccvs_list"].__len__() + elements["opamp_list"].__len__()
     Y = np.zeros([n+1, n+1])
     J = np.zeros([n+1, 1])
     V = []
@@ -107,11 +107,22 @@ def matrix_formulation_OP(elements):
         V.append("I_" + element["instance_name"] + "_2")
         Element_stamps.ccvs_stamp(Y, from_nodes = (from_node_1,from_node_2) , to_nodes= (to_node_1,to_node_2) , Rm=Rm, ccvs_num = ccvs_num)
 
+
+    position += elements["ccvs_list"].__len__()
+    for i, element in enumerate(elements["opamp_list"]):
+        neg_terminal = element["neg_terminal"]
+        pos_terminal = element["pos_terminal"]
+        out_terminal = element["out_terminal"]
+        opamp_num = position + i + 1
+
+        V.append("I_" + element["instance_name"])
+        Element_stamps.opamp_stamp(Y, neg_terminal = neg_terminal , pos_terminal = pos_terminal , out_terminal = out_terminal, opamp_num = opamp_num)
+
     return Y, V, J
 
 def matrix_formulation_AC(elements, freq):
     n = elements["num_nets"] + elements["vsource_list"].__len__() +elements["inductor_list"].__len__()+ elements["vcvs_list"].__len__() \
-        + elements["cccs_list"].__len__() + 2*elements["ccvs_list"].__len__()
+        + elements["cccs_list"].__len__() + 2*elements["ccvs_list"].__len__() + elements["opamp_list"].__len__()
     Y = np.zeros([n+1, n+1], dtype="complex")
     J = np.zeros([n+1, 1])
     V = []
@@ -207,6 +218,16 @@ def matrix_formulation_AC(elements, freq):
         V.append("I_" + element["instance_name"] + "_1")
         V.append("I_" + element["instance_name"] + "_2")
         Element_stamps.ccvs_stamp(Y, from_nodes = (from_node_1,from_node_2) , to_nodes= (to_node_1,to_node_2) , Rm=Rm, ccvs_num = ccvs_num)
+
+    position += elements["ccvs_list"].__len__()
+    for i, element in enumerate(elements["opamp_list"]):
+        neg_terminal = element["neg_terminal"]
+        pos_terminal = element["pos_terminal"]
+        out_terminal = element["out_terminal"]
+        opamp_num = position + i + 1
+
+        V.append("I_" + element["instance_name"])
+        Element_stamps.opamp_stamp(Y, neg_terminal = neg_terminal , pos_terminal = pos_terminal , out_terminal = out_terminal, opamp_num = opamp_num)
 
     return Y, V, J
 
@@ -316,6 +337,7 @@ def Divide_Result_Matrix(Solution_Matrix: np.array, V: List) -> Dict:
 def Plot_Output(Plot_name, frequencies, Result):
     for i, val in enumerate(Plot_name):
         plt.figure()
+        # plt.plot(frequencies, 20*np.log10(Result[val]), 'r')
         plt.plot(frequencies, Result[val], 'r')
         plt.xlabel('Frequency (Hz)')
         plt.ylabel('Amplitude')

@@ -94,3 +94,12 @@ def ccvs_stamp(Y : np.array, from_nodes: tuple , to_nodes: tuple , Rm : float, c
     Y[to_nodes[1]][ccvs_num+1] += 0
 
     return Y
+
+def opamp_stamp(Y : np.array, neg_terminal: int , pos_terminal: int , out_terminal: int, opamp_num: int):
+
+    Y[opamp_num][neg_terminal] += 1
+    Y[opamp_num][pos_terminal] += -1
+    Y[out_terminal][opamp_num] += 1
+
+    return Y
+
