@@ -83,12 +83,13 @@ def Tran_Analysis_Regx(tran_analysis_line: str) -> bool:
     """
     This Function determine if tran_analysis_line match standard of netlist structure or not
     """
-    pattern = r"^[A-Z|a-z|_][^\s]*\s+(TRAN|tran)\s+\d+(\s*|(n|u|m))\s*$"
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(TRAN|tran)\s+\d+(\s*|(n|u|m))\s+\d+(\s*|(n|u|m))\s*$"
     return False if re.match(pattern, tran_analysis_line) == None else True
 
 def Plot_Output_Regx(plot_output_line: str) -> bool:
     """
     This Function determine if plot_output_line match standard of netlist structure or not
     """
-    pattern = r"^(P|p)lot\s+[A-Z|a-z|_][^\s]*"
+    # pattern = r"^(P|p)lot\s+[A-Z|a-z|_][^\s]*"
+    pattern = r"^plot\s+([A-Z|a-z|_][^\s]*\s){1,10}"
     return False if re.match(pattern, plot_output_line) == None else True

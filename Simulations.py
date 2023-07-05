@@ -62,7 +62,7 @@ def matrix_formulation_OP(elements):
         V.append("I_" + element["instance_name"])
         Element_stamps.vdc_stamp(Y, J, from_node = from_node , to_node= to_node , v_value= 0 , vdc_num = ind_num)
 
-    position += elements["inductor_list"].__len__()
+    
     for i, element in enumerate(elements["vccs_list"]):
         from_node_1 = element["from_1"]
         to_node_1 = element["to_1"]
@@ -71,6 +71,7 @@ def matrix_formulation_OP(elements):
         gm = element["value"] * Convert_unit_to_value[element["unit"]]
         Element_stamps.vccs_stamp(Y, from_nodes = (from_node_1,from_node_2) , to_nodes= (to_node_1,to_node_2) , gm= gm)
 
+    position += elements["inductor_list"].__len__()
     for i, element in enumerate(elements["vcvs_list"]):
         from_node_1 = element["from_1"]
         to_node_1 = element["to_1"]
@@ -78,7 +79,6 @@ def matrix_formulation_OP(elements):
         to_node_2 = element["to_2"]
         vcvs_num = position + i + 1
         A = element["value"] * Convert_unit_to_value[element["unit"]]
-
         V.append("I_" + element["instance_name"])
         Element_stamps.vcvs_stamp(Y, from_nodes = (from_node_1,from_node_2) , to_nodes= (to_node_1,to_node_2) , A=A, vcvs_num = vcvs_num)
 
@@ -138,10 +138,10 @@ def matrix_formulation_AC(elements, freq):
         if freq == 0:
             pass
         else:
-            value = 1/(1j*freq*element["value"] * Convert_unit_to_value[element["unit"]])
+            value = 1/(1j*2*np.pi*freq*element["value"] * Convert_unit_to_value[element["unit"]])
             Element_stamps.res_stamp(Y, from_node = from_node , to_node= to_node , res_value= value)
 
-    position =  elements["num_nets"]
+    position = elements["num_nets"]
     for i, element in enumerate(elements["vsource_list"]):
         from_node = element["from"]
         to_node = element["to"]
@@ -157,12 +157,12 @@ def matrix_formulation_AC(elements, freq):
         to_node = element["to"]
         ind_num = position + i + 1
         V.append("I_" + element["instance_name"])
-        Element_stamps.vdc_stamp(Y, J, from_node=from_node, to_node=to_node, v_value=0, vdc_num=ind_num)
+        Element_stamps.vdc_stamp(Y, J, from_node=from_node, to_node=to_node, v_value=0, vdc_num=ind_num) 
         if freq == 0:
-            pass
+            value = np.inf
         else:
-            value = 1j*freq*element["value"] * Convert_unit_to_value[element["unit"]]
-            Element_stamps.res_stamp(Y, from_node = from_node , to_node= to_node , res_value= value)
+            value = 1/(1j*freq*2*np.pi*element["value"] * Convert_unit_to_value[element["unit"]])
+        Element_stamps.res_stamp(Y, from_node = 0 , to_node= ind_num , res_value= -value)
 
     for i, element in enumerate(elements["vccs_list"]):
         from_node_1 = element["from_1"]
@@ -240,9 +240,9 @@ def matrix_formulation_tran(elements, time_step , old_result):
         Element_stamps.res_stamp(Y, from_node=from_node, to_node=to_node, res_value=res_value)
 
         results = np.vstack((np.array([0]), old_result))
-        previous_volt_drop = float(results[from_node] - results[to_node])
+        previous_volt_drop = float(results[to_node] - results[from_node])
 
-        I_value = -1*cap_value * previous_volt_drop / time_step
+        I_value = cap_value * previous_volt_drop / time_step
         Element_stamps.idc_stamp(J, from_node=from_node, to_node=to_node, I_value=I_value)
 
     position = elements["num_nets"]
@@ -307,7 +307,6 @@ def matrix_formulation_tran(elements, time_step , old_result):
 
     return Y, V, J
 
-
 def Divide_Result_Matrix(Solution_Matrix: np.array, V: List) -> Dict:
     Result_Dict = {}
     for i in range(len(V)):
@@ -315,10 +314,12 @@ def Divide_Result_Matrix(Solution_Matrix: np.array, V: List) -> Dict:
     return Result_Dict
 
 def Plot_Output(Plot_name, frequencies, Result):
-    plt.plot(frequencies, Result[Plot_name], 'r')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Amplitude')
-    plt.title(f"{Plot_name} Curve")
-    plt.xscale('log')
-    plt.grid(True)
+    for i, val in enumerate(Plot_name):
+        plt.figure()
+        plt.plot(frequencies, Result[val], 'r')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('Amplitude')
+        plt.title(f"{val} Curve")
+        plt.xscale('log')
+        plt.grid(True)
     plt.show()

@@ -4,22 +4,32 @@
 //Vdc vsource 1 0 dc 1
 //dcOp dc
 
+// V1 vsource 1 0 ac 1
+// C1 capacitor 1 0 10u
+// L1 inductor 2 0 100m
+// R1 resistor 1 2 100
+// ac ac 10 200 2000
+// plot I_V1 
 
 
 // LPF
-R1 resistor 1 2 1
-C1 capacitor 2 0 1
-Vin vsource 1 0 dc 1
-tran tran 100
-plot V2
+// R1 resistor 1 2 1m
+// C1 capacitor 2 0 1
+// Vin vsource 1 0 dc 1
+// dcOp dc
+// ac ac 0 200 2000
+// tran tran 1m 10
+// plot V1 V2
 
-//test dc with cap and ind
-//R1 resistor 1 2 1
-//C2 capacitor 2 0 100m
-//L3 inductor 2 3 1
-//R1 resistor 3 0 1
-//vdc1 vsource 1 0 dc 1
-//dcOp dc
+// test dc with cap and ind
+// R1 resistor 1 2 1
+// C2 capacitor 2 0 100m
+// L3 inductor 2 3 1
+// R2 resistor 3 0 1
+// vdc1 vsource 1 0 ac 1
+// ac ac 0 10K 2000
+// plot V3
+// dcOp dc
 
 //test AC zero freq
 //R1 resistor 1 2 1

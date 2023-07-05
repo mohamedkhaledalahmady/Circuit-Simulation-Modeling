@@ -195,15 +195,16 @@ def AC_Analysis_Parsing(ac_analysis_line: str) -> Dict:
 def Tran_Analysis_Parsing(tran_analysis_line: str) -> Dict:
     """
     This Function parse tran_analysis_line to its parameters into dictionary as follows
-    dict={"analysis_name", "analysis_type", "stop_time", "stop_time_unit"}
+    dict={"analysis_name", "analysis_type", "time_step", "time_step_unit, "stop_time", "stop_time_unit"}
     """
     tran_analysis_line_split = tran_analysis_line.split()
     dict = {
         "analysis_name": tran_analysis_line_split[0],
         "analysis_type": tran_analysis_line_split[1],
-        ## TODO : add time step
-        "stop_time": int(tran_analysis_line_split[2][:-1]) if not tran_analysis_line_split[2][-1].isdigit() else int(tran_analysis_line_split[2]),
-        "stop_time_unit": tran_analysis_line_split[2][-1] if not tran_analysis_line_split[2][-1].isdigit() else "nothing"
+        "time_step": int(tran_analysis_line_split[2][:-1]) if not tran_analysis_line_split[2][-1].isdigit() else int(tran_analysis_line_split[2]),
+        "time_step_unit": tran_analysis_line_split[2][-1] if not tran_analysis_line_split[2][-1].isdigit() else "nothing",
+        "stop_time": int(tran_analysis_line_split[3][:-1]) if not tran_analysis_line_split[3][-1].isdigit() else int(tran_analysis_line_split[3]),
+        "stop_time_unit": tran_analysis_line_split[3][-1] if not tran_analysis_line_split[3][-1].isdigit() else "nothing"
     }
     return dict
 
@@ -213,7 +214,11 @@ def Plot_Output_Parsing(plot_output_line: str) -> str:
     dict={"plot_name"}
     """
     plot_output_line_split = plot_output_line.split()
-    return plot_output_line_split[1]
+    plot_name = []
+    for i, val in enumerate(plot_output_line_split):
+        if i != 0:
+            plot_name.append(val)
+    return plot_name
 
 def Get_Number_of_Nets(circuit_dict: dict): # -> [int ,Dict] :
     # TODO : change the name of the function ;)
@@ -247,7 +252,7 @@ def parser(content: str) -> Dict:
         "vcvs_list": [],
         "cccs_list": [],
         "ccvs_list": [], 
-        "plot_name": str
+        "plot_name": []
     }
     for i, val in enumerate(content):
         if '//' not in val:
