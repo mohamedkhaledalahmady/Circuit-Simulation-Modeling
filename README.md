@@ -7,10 +7,10 @@ An urgent question comes to my mind
 * The first spice was developed by "Laurence Nagel" at "Berkeley" in 1960, but it has limitations in representing some elements, the real change happened in 1975 when the equation formulation via 𝑴𝒐𝒅𝒊𝒇𝒊𝒆𝒅 𝑵𝒐𝒅𝒂𝒍 𝑨𝒏𝒂𝒍𝒚𝒔𝒊𝒔 (𝑴𝑵𝑨) was introduced and the limitations have gone.
 
 # _**1st version of 𝑺𝒑𝒊𝒄𝒆 𝑻𝒐𝒐𝒍**_
-provides the following capability:
-1. Linear DC Analysis
-2. AC Analysis
-3. Linear Transient Analysis
+* provides the following capability:
+    1. Linear DC Analysis
+    2. AC Analysis
+    3. Linear Transient Analysis
 
 # _**The upcoming Work**_
 - Automated Netlist creation instead of manually.
