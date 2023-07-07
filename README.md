@@ -12,7 +12,7 @@ An urgent question comes to my mind
     2. AC Analysis
     3. Linear Transient Analysis
 
-> ## Setup and running settings:
+# _**Netlist Creation & Run**_
    * After clone all files:
         * fill Netlist_file with your circuit description
         * using any command line window and type
