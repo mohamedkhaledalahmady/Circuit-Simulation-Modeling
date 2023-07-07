@@ -23,8 +23,8 @@ def res_stamp(Y : np.array , from_node : int  , to_node : int , res_value :int):
 
 def idc_stamp(J : np.array , from_node : int  , to_node : int , I_value :int):
 
-    J[from_node] = -I_value
-    J[to_node] = I_value
+    J[from_node] += -I_value
+    J[to_node] += I_value
     return J
 
 def vdc_stamp(Y : np.array, J : np.array ,from_node : int  , to_node : int , v_value :int , vdc_num : int):
@@ -38,10 +38,10 @@ def vdc_stamp(Y : np.array, J : np.array ,from_node : int  , to_node : int , v_v
 
 def vccs_stamp(Y : np.array, from_nodes: tuple , to_nodes: tuple , gm : float):
 
-    Y[from_nodes[0]][from_nodes[1]] = gm
-    Y[to_nodes[0]][to_nodes[1]] = gm
-    Y[from_nodes[0]][to_nodes[1]] = -gm
-    Y[to_nodes[0]][from_nodes[1]] = -gm
+    Y[from_nodes[0]][from_nodes[1]] += gm
+    Y[to_nodes[0]][to_nodes[1]] += gm
+    Y[from_nodes[0]][to_nodes[1]] += -gm
+    Y[to_nodes[0]][from_nodes[1]] += -gm
     return Y
 
 def vcvs_stamp(Y : np.array, from_nodes: tuple , to_nodes: tuple , A : float, vcvs_num : int):

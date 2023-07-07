@@ -1,25 +1,122 @@
-// 5th order 1dB Ripple Chebycheve HPF
-C1 capacitor 1 2 10n
-C2 capacitor 2 3 10n
-R1 resistor 2 4 3612
-R2 resistor 3 0 28170
-Opamp1 opamp 3 4 4
 
-C3 capacitor 4 5 10n
-C4 capacitor 5 6 10n
-R3 resistor 5 7 1380
-R4 resistor 6 0 170219
-Opamp2 opamp 6 7 7
+// Dependent Sources
+// R1 resistor 1 0 270
+// R2 resistor 1 2 330
+// R3 resistor 2 3 220
+// R4 resistor 3 4 470
+// I1 isource 1 0 dc 50m
+// Vdep ccvs 2 4 0 4 dc 100
+// dcOp dc
 
-C5 capacitor 7 8 10n
-R5 resistor 8 0 4456
-Opamp1 opamp 8 9 9
 
-V vsource 1 0 dc 1
+// Simple DC Circuit
+// R1 resistor 1 2 3
+// R2 resistor 2 0 1
+// R3 resistor 3 4 2
+// R4 resistor 4 5 1
+// R5 resistor 5 0 5
+// V1 vsource 0 1 dc 10
+// V2 vsource 4 0 dc 15
+// V3 vsource 3 5 dc 5
+// I1 isource 0 2 dc 2
+// I2 isource 2 3 dc 5
+// dcOp dc
+
+
+
+// R1 resistor 1 2 1K
+// R2 resistor 2 3 1200
+// R3 resistor 2 3 6K
+// R4 resistor 2 4 4K
+// R5 resistor 4 5 2K
+// R6 resistor 3 5 3K
+// R7 resistor 5 0 6600
+// Vdc1 vsource 1 0 dc 20
+// dcOp dc
+
+// VCVS circuit
+// R1 resistor 1 2 3
+// vdc vsource 1 0 dc 10
+// dep vcvs 2 0 1 2 dc 5
+// dcOp dc
+
+// R1 resistor 1 2 4
+// R2 resistor 2 3 4
+// R3 resistor 3 0 8
+// vdc1 vsource 1 0 dc 50
+// vdc2 vsource 0 2 dc 30
+// Idc isource 3 1 dc 12
+// dcOp dc
+
+// R1 resistor 0 1 75K
+// R2 resistor 1 2 125K
+// R3 resistor 2 0 50K
+// V1 vsource 1 0 dc 5
+// I1 isource 0 2 dc 40u
+// dcOp dc
+
+// R1 resistor 1 2 10K
+// R2 resistor 2 3 40K
+// R3 resistor 2 0 20K
+// V1 vsource 1 0 dc 50
+// V2 vsource 0 3 dc 80
 // dcOp dc 
+
+// R1 resistor 1 2 47K
+// R2 resistor 2 3 39K
+// R3 resistor 4 5 68K
+// R4 resistor 5 0 56K
+// V1 vsource 0 1 dc 1500m
+// V2 vsource 4 3 dc 3
+// I1 isource 2 5 dc 12m
+// dcOp dc
+
+// DC Circuit
+// R1 resistor 1 2 3
+// R2 resistor 2 0 1
+// R3 resistor 3 4 2
+// R4 resistor 4 5 1
+// R5 resistor 5 0 5
+// Vdc1 vsource 0 1 dc 10
+// Vdc2 vsource 4 0 dc 15
+// Vdc3 vsource 3 5 dc 5
+// Idc1 isource 0 2 dc 2
+// Idc2 isource 2 3 dc 5
+// dcOp dc
+
+// R1 resistor 1 2 3
+// R2 resistor 2 0 1
+// R3 resistor 3 4 2
+// R4 resistor 4 5 1
+// R5 resistor 5 0 5
+// Vdc1 vsource 0 1 dc 10
+// Vdc2 vsource 4 0 dc 15
+// Vdc3 vsource 3 5 dc 5
+// I1 isource 0 2 dc 2
+// I1 isource 2 3 dc 5
+// dcOp dc
+
+ 
+// 5th order 1dB Ripple Chebycheve HPF
+// C1 capacitor 1 2 10n
+// C2 capacitor 2 3 10n
+// R1 resistor 2 4 3612
+// R2 resistor 3 0 28170
+// Opamp1 opamp 3 4 4
+
+// C3 capacitor 4 5 10n
+// C4 capacitor 5 6 10n
+// R3 resistor 5 7 1380
+// R4 resistor 6 0 170219
+// Opamp2 opamp 6 7 7
+
+// C5 capacitor 7 8 10n
+// R5 resistor 8 0 4456
+// Opamp1 opamp 8 9 9
+
+// V vsource 1 0 ac 1
 // ac ac 100 10K 100
-tran tran 100m 10
-plot V9
+// plot V9
 
 // 4th order butterworth LPF
 // R1 resistor 1 2 1K
@@ -62,13 +159,11 @@ plot V9
 
 
 // LPF
-// R1 resistor 1 2 1m
-// C1 capacitor 2 0 1
-// Vin vsource 1 0 dc 1
-// dcOp dc
-// ac ac 0 200 2000
-// tran tran 1m 10
-// plot V1 V2
+R1 resistor 1 2 1
+C1 capacitor 2 0 1
+Vin vsource 1 0 dc 1
+tran tran 1m 10
+plot V2
 
 // test dc with cap and ind
 // R1 resistor 1 2 1
@@ -115,7 +210,7 @@ plot V9
 // dcOp dc
 
 
-// 3 vsourse and 2 isource
+// 3 vsource and 2 isource
 // R1 resistor 1 2 3
 // R2 resistor 2 0 1
 // R3 resistor 3 4 2

@@ -6,7 +6,7 @@ def Resistor_Regx(resistor_line: str) -> bool:
     """
     This Function determine if resistor line match standard of netlist structure or not
     """
-    pattern = r"^[A-Z|a-z|_][^\s]*\s+(R|r)esistor\s+\d+\s+\d+\s+\d+(\s*|(M|m|K|k|T|t))\s*$"
+    pattern = r"^[A-Z|a-z|_][^\s]*\s+(R|r)esistor\s+\d+\s+\d+\s+\d+(\s*|(T|G|M|K|m))\s*$"
     return False if re.match(pattern, resistor_line) == None else True
 
 def Capacitor_Regx(capacitor_line: str) -> bool:
