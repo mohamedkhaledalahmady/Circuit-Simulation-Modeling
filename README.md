@@ -12,6 +12,12 @@ An urgent question comes to my mind
     2. AC Analysis
     3. Linear Transient Analysis
 
+> ## Setup and running settings:
+   * After clone all files:
+        * fill Netlist_file with your circuit description
+        * using any command line window type
+        ```Python
+        python main.py
 # _**The upcoming Work**_
 - Automated Netlist creation instead of manually.
 - Add non-linear devices such as (diode, transistor) (which is a big challenge)
