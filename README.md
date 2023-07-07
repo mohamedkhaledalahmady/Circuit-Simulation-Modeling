@@ -15,7 +15,7 @@ An urgent question comes to my mind
 > ## Setup and running settings:
    * After clone all files:
         * fill Netlist_file with your circuit description
-        * using any command line window type
+        * using any command line window and type
         ```Python
         python main.py
 # _**The upcoming Work**_
