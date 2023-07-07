@@ -19,6 +19,8 @@ An urgent question comes to my mind
 
 # _**References & Resources**_ 
 1. Electronic Circuit and System Simulation Methods by Lawrence T.pillage
-2. "Analog/Mixed-Signal Simulation and Modeling" playlist by Dr/Hesham Omran
+2. "
+[Analog/Mixed-Signal Simulation and Modeling](https://www.youtube.com/playlist?list=PLMSBalys69yxy9kAKVvXKgJpg8dFJ4JdK)
+" by Dr/Hesham Omran
 
 * The attached document contains more details about Netlist structure and examples for different analysis.
