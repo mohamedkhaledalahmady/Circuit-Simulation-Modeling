@@ -334,15 +334,32 @@ def Divide_Result_Matrix(Solution_Matrix: np.array, V: List) -> Dict:
         Result_Dict[V[i]] = Solution_Matrix[i, :]
     return Result_Dict
 
-def Plot_Output(Plot_name, frequencies, Result):
+def Plot_Output_AC(Plot_name, frequencies, Result_amp, Result_angle):
+    for i, val in enumerate(Plot_name):
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6))
+        # plt.figure()
+        ax1.plot(frequencies, 20*np.log10(Result_amp[val]), 'r', label="Amplitude")
+        ax1.set_xlabel('Frequency (Hz)')
+        ax1.set_ylabel('Amplitude (dB)')
+        ax1.set_title(f"{val} Plot")
+        ax1.grid(True)
+        ax1.set_xscale('log')
+
+        ax2.plot(frequencies, Result_angle[val], 'b', label="Phase")
+        ax2.set_xlabel('Frequency (Hz)')
+        ax2.set_ylabel('Phase °')
+        ax2.grid(True)
+        ax2.set_xscale('log')
+
+    plt.show()
+
+
+def Plot_Output_Tran(Plot_name, frequencies, Result):
     for i, val in enumerate(Plot_name):
         plt.figure()
-        # plt.plot(frequencies, 20*np.log10(Result[val]), 'r')
         plt.plot(frequencies, Result[val], 'r')
-        # plt.xlabel('Frequency (Hz)')
         plt.xlabel('Time (sec)')
         plt.ylabel('Amplitude')
-        plt.title(f"{val} Curve")
-        # plt.xscale('log')
+        plt.title(f"{val} Plot")
         plt.grid(True)
     plt.show()

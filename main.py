@@ -7,7 +7,7 @@ from Element_stamps import Convert_unit_to_value
 from Solution import Solve_Linear_Matrix
 
 ########################### Netlist Parsing ####################### 
-Circuit_Matrix = parser(read_file('Netlist_2.txt', list))
+Circuit_Matrix = parser(read_file('Netlist_3.txt', list))
 # pprint.pprint(Circuit_Matrix)
 
 # TODO : try and catch must be implemented here (if netlist not correct)
@@ -20,7 +20,8 @@ if Circuit_Matrix["analysis"][0]["analysis_type"] == "dc":
 
 elif Circuit_Matrix["analysis"][0]["analysis_type"] == "ac":
 ########################### AC Analysis ########################### 
-    n = Circuit_Matrix["num_nets"] + Circuit_Matrix["vsource_list"].__len__() + Circuit_Matrix["inductor_list"].__len__() + Circuit_Matrix["opamp_list"].__len__()
+    n = Circuit_Matrix["num_nets"] + Circuit_Matrix["vsource_list"].__len__() + Circuit_Matrix["inductor_list"].__len__() + Circuit_Matrix["opamp_list"].__len__() + Circuit_Matrix["vcvs_list"].__len__()
+    # print(f"n: {n}")
     from_frequency = Circuit_Matrix["analysis"][0]["freq_start"] * Convert_unit_to_value[Circuit_Matrix["analysis"][0]["freq_start_unit"]]
     to_frequency = Circuit_Matrix["analysis"][0]["freq_stop"] * Convert_unit_to_value[Circuit_Matrix["analysis"][0]["freq_stop_unit"]]
     if from_frequency == 0:
@@ -28,14 +29,19 @@ elif Circuit_Matrix["analysis"][0]["analysis_type"] == "ac":
     else:
         number_of_decades = int(np.log10(to_frequency / from_frequency))
     number_of_frequencies = Circuit_Matrix["analysis"][0]["points_per_dec"]*number_of_decades
-    solution_vector = np.zeros([n, number_of_frequencies])
+    # solution_vector = np.zeros([n, number_of_frequencies])
+    solution_vector = np.zeros([n, number_of_frequencies], dtype=complex)
+    # print(np.size(solution_vector))
     frequencies = np.linspace(start=from_frequency, stop=to_frequency, num=number_of_frequencies)
     V = []
     for i, frq in enumerate(frequencies):
         Y, V, J = matrix_formulation_AC(Circuit_Matrix, frq)
         solution_vector[:, i, np.newaxis] = Solve_Linear_Matrix(Y, J, "ac")
-    Result = Divide_Result_Matrix(solution_vector, V)
-    Plot_Output(Circuit_Matrix['plot_name'], frequencies, Result)
+
+    Result    = Divide_Result_Matrix(solution_vector, V)
+    Result_amp = Divide_Result_Matrix(np.abs(solution_vector), V)
+    Result_angle = Divide_Result_Matrix(np.angle(solution_vector) * 180/np.pi, V)
+    Plot_Output_AC(Circuit_Matrix['plot_name'], frequencies, Result_amp, Result_angle)
 # TODO: ADD Opamp to transient 
 elif Circuit_Matrix["analysis"][0]["analysis_type"] == "tran":
 ########################### tran Analysis ###########################
@@ -59,7 +65,6 @@ elif Circuit_Matrix["analysis"][0]["analysis_type"] == "tran":
         solution_vector[:, i + 1 , np.newaxis] = Solve_Linear_Matrix(Y, J, "op")
 
     Result = Divide_Result_Matrix(solution_vector, V)
-    # pprint.pprint(solution_vector)
     steps = np.hstack((np.array([0]) , steps))
-    Plot_Output(Circuit_Matrix['plot_name'], steps, Result)
+    Plot_Output_Tran(Circuit_Matrix['plot_name'], steps, Result)
 

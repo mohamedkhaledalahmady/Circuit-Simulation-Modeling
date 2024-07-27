@@ -1,0 +1,51 @@
+// LPF
+// R1 resistor 1 2 100
+// L1 inductor 2 3 100m
+// C1 capacitor 3 0 10u
+// V1 vsource 1 0 ac 1
+// ac ac 1 1K 2000
+// plot V3
+
+
+// LPF
+// R1 resistor 1 2 1
+// C1 capacitor 2 0 1
+// Vin vsource 1 0 dc 1
+// tran tran 1m 10
+// plot V2
+
+
+// Non-Inverting feedback configuration
+// R1 resistor 4 0 10K
+// C1 capacitor 4 0 1591p
+// I1  vccs   0 4 2 3 ac 100m
+// V2  vcvs   1 0 4 0 ac 1
+// Rf resistor 3 1 9K
+// R2 resistor 3 0 1K
+// Vs vsource 2 0 ac 1
+// ac ac 1 1G 2000
+// plot V1
+
+
+
+// unity-gain feedback configuration
+R1 resistor 4 0 10K
+C1 capacitor 4 0 1591p
+V1 vsource 2 0 ac 1
+I1  vccs   0 4 2 3 ac 100m
+V2  vcvs   1 0 4 0 ac 1
+V3 vsource 3 1 ac 0
+ac ac 1 500M 200
+plot V1
+
+
+
+// LPF Amplifier
+// R1 resistor 1 2 1K
+// R2 resistor 2 3 2K
+// C2 capacitor 2 3 1u
+// Opamp opamp 0 2 3 
+// V vsource 1 0 ac 1
+// ac ac 1 1K 200
+// plot V1 V2 V3
+// dcOp dc
