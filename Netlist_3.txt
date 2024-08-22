@@ -1,3 +1,21 @@
+// CCCS
+
+V1 vsource 2 0 dc 20
+
+Vdep ccvs 1 4 3 5 dc 35
+Idep vccs 4 0 2 3 dc 3.125
+
+R1 resistor 1 0 20
+R2 resistor 1 2 2
+R3 resistor 2 3 1
+R4 resistor 5 0 40
+R5 resistor 3 4 4
+R6 resistor 4 0 80
+
+dcOp dc
+
+
+
 // LPF
 // R1 resistor 1 2 100
 // L1 inductor 2 3 100m
@@ -29,14 +47,14 @@
 
 
 // unity-gain feedback configuration
-R1 resistor 4 0 10K
-C1 capacitor 4 0 1591p
-V1 vsource 2 0 ac 1
-I1  vccs   0 4 2 3 ac 100m
-V2  vcvs   1 0 4 0 ac 1
-V3 vsource 3 1 ac 0
-ac ac 1 500M 200
-plot V1
+// R1 resistor 4 0 10K
+// C1 capacitor 4 0 1591p
+// V1 vsource 2 0 ac 1
+// I1  vccs   0 4 2 3 ac 100m
+// V2  vcvs   1 0 4 0 ac 1
+// V3 vsource 3 1 ac 0
+// ac ac 1 500M 200
+// plot V1
 
 
 

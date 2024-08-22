@@ -14,6 +14,9 @@ Circuit_Matrix = parser(read_file('Netlist_3.txt', list))
 if Circuit_Matrix["analysis"][0]["analysis_type"] == "dc":
 ########################### DC Analysis ###########################
     Y, V, J = matrix_formulation_OP(Circuit_Matrix)
+    pprint.pprint(Y);
+    pprint.pprint(V);
+    pprint.pprint(J);
     Result = Solve_Linear_Matrix(Y, J, "dc")
     for i in range(len(V)):
         print(f"{V[i]} = {Result[i]}")

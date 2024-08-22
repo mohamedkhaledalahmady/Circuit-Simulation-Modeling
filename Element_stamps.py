@@ -23,17 +23,17 @@ def res_stamp(Y : np.array , from_node : int  , to_node : int , res_value :int):
 
 def idc_stamp(J : np.array , from_node : int  , to_node : int , I_value :int):
 
-    J[from_node] += -I_value
-    J[to_node] += I_value
+    J[from_node]    += -I_value
+    J[to_node]      += I_value
     return J
 
 def vdc_stamp(Y : np.array, J : np.array ,from_node : int  , to_node : int , v_value :int , vdc_num : int):
-        Y[from_node][vdc_num] = 1
-        Y[to_node][vdc_num] = -1
-        Y[vdc_num][to_node] = -1
-        Y[vdc_num][from_node] = 1
+        Y[from_node][vdc_num]   = 1
+        Y[to_node][vdc_num]     = -1
+        Y[vdc_num][to_node]     = -1
+        Y[vdc_num][from_node]   = 1
 
-        J[vdc_num] += v_value
+        J[vdc_num]              += v_value
         return Y, J
 
 def vccs_stamp(Y : np.array, from_nodes: tuple , to_nodes: tuple , gm : float):
